@@ -242,9 +242,10 @@ dialog form{display:flex;justify-content:center;margin-top:12px}
 /* Booking */
 .book-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:52px;align-items:stretch}
 .book-left{display:flex;flex-direction:column;align-items:flex-start}
-.dep-note{margin-top:auto;color:var(--cream);font-size:15px;font-weight:600}
-#depBtn{margin-top:12px;margin-bottom:26px}
-@media (max-width:860px){.dep-note{margin-top:24px}#depBtn{margin-bottom:0}}
+.dep-box{margin-top:auto;border:2px solid var(--red);border-radius:8px;background:var(--panel);padding:18px 20px;align-self:stretch}
+.dep-note{color:var(--cream);font-size:15px;font-weight:600}
+#depBtn{margin-top:12px}
+@media (max-width:860px){.dep-box{margin-top:24px}}
 #depDialog{background:var(--panel);color:var(--cream);border:1px solid var(--gold);border-radius:10px;padding:24px;max-width:min(92vw,440px)}
 #depDialog h3{font-size:26px;margin-bottom:12px}
 #depDialog .qr{background:#fff;border-radius:8px;padding:8px;width:100%;max-width:260px;margin:0 auto 14px;max-height:none}
@@ -256,7 +257,7 @@ dialog form{display:flex;justify-content:center;margin-top:12px}
 .faq{margin-top:32px;display:grid;gap:14px;font-size:15px}
 .faq b{display:block;color:var(--cream)}
 .faq p{color:var(--muted)}
-#bookForm{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:26px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+#bookForm{background:var(--panel);border:2px solid var(--red);border-radius:8px;padding:26px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
 #bookForm label{display:grid;gap:6px;font-size:14px;color:var(--muted);min-width:0}
 #bookForm .full{grid-column:1/-1}
 input,select,textarea{font:16px var(--body);color:var(--cream);background:var(--ink);border:1px solid var(--line);border-radius:4px;padding:11px 12px;width:100%}
@@ -434,8 +435,10 @@ main > section ~ section{border-top:2px solid var(--red)}
           <div><b>Do you bring sound?</b><p>Yes, our own PA and a mic for toasts.</p></div>
           <div><b>Can we request songs?</b><p>Yes. Send your must-plays ahead of time.</p></div>
         </div>
-        <p class="dep-note">Once availability is confirmed, a deposit is required to reserve your date.</p>
-        <button class="btn btn-solid" type="button" id="depBtn">Deposit or Tip?</button>
+        <div class="dep-box">
+          <p class="dep-note">Once availability is confirmed, a deposit may be required to reserve your date.</p>
+          <button class="btn btn-solid" type="button" id="depBtn">Deposit or Tip?</button>
+        </div>
       </div>
       <form id="bookForm" name="booking" method="POST" data-netlify="true" netlify-honeypot="company">
         <input type="hidden" name="form-name" value="booking">
@@ -447,7 +450,7 @@ main > section ~ section{border-top:2px solid var(--red)}
         <label>Hours needed<select id="f-hours" name="hours" required><option value="" selected disabled>Select hours</option><option>1 hour</option><option>2 hours</option><option>3 hours</option><option>4 hours</option><option>5 hours</option></select></label>
         <label class="full">City or venue<input id="f-where" name="city_or_venue"></label>
         <label>Event type<select id="f-type" name="event_type"><option>Wedding</option><option>Corporate event</option><option>Private party</option><option>Yacht party</option><option>Restaurant / wine bar</option><option>Other</option></select></label>
-        <label>Lineup<select id="f-pkg" name="lineup"><option selected>Not sure yet</option><option>Duo</option><option>Trio</option><option>Full band</option></select></label>
+        <label>Lineup<select id="f-pkg" name="lineup"><option>Not sure yet</option><option selected>Duo</option><option>Trio</option><option>Full band</option></select></label>
         <label class="full">Anything else?<textarea id="f-msg" name="message" placeholder="Example: About 120 guests, Cocktail Hour, Dinner Music, First Dance, Dance Set"></textarea></label>
         <button class="btn btn-solid" type="submit">Check availability</button>
         <p class="sent" id="sent" hidden aria-live="polite"></p>
