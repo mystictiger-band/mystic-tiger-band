@@ -263,6 +263,19 @@ dialog form{display:flex;justify-content:center;margin-top:12px}
 input,select,textarea{font:16px var(--body);color:var(--cream);background:var(--ink);border:1px solid var(--line);border-radius:4px;padding:11px 12px;width:100%}
 textarea{min-height:90px;resize:vertical}
 #bookForm .btn{justify-self:start}
+.addons-field{display:grid;gap:6px;font-size:14px;color:var(--muted);min-width:0}
+.addons{position:relative}
+.addons summary{display:block;list-style:none;cursor:pointer;font:16px var(--body);color:var(--cream);background:var(--ink);border:1px solid var(--line);border-radius:4px;padding:11px 40px 11px 12px;position:relative}
+.addons summary::-webkit-details-marker{display:none}
+.addons summary span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.addons summary::after{content:"";position:absolute;right:16px;top:50%;width:7px;height:7px;border-right:2px solid var(--cream);border-bottom:2px solid var(--cream);transform:translateY(-70%) rotate(45deg)}
+.addons[open] summary::after{transform:translateY(-25%) rotate(-135deg)}
+.addons[open] summary{border-color:var(--gold)}
+.addons summary:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.addons-menu{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:5;background:var(--panel);border:1px solid var(--gold);border-radius:4px;padding:6px 0;box-shadow:0 14px 34px rgba(0,0,0,.6)}
+#bookForm .addons-menu label{display:flex;align-items:center;gap:12px;padding:10px 14px;font-size:16px;color:var(--cream);cursor:pointer}
+#bookForm .addons-menu label:hover{background:var(--ink)}
+.addons-menu input{width:18px;height:18px;margin:0;padding:0;flex:none;accent-color:var(--gold)}
 .sent{grid-column:1/-1;color:var(--gold);font-size:15px}
 @media (max-width:860px){.book-grid{grid-template-columns:1fr;gap:36px}}
 @media (max-width:480px){#bookForm{grid-template-columns:1fr;padding:18px}}
@@ -346,7 +359,7 @@ main > section ~ section{border-top:2px solid var(--red)}
 
   <section class="alt" id="packages">
     <div class="wrap">
-      <div class="head"><p class="eyebrow">Packages</p><h2>Pick your lineup</h2><p>Sound system and a custom setlist included with every package.</p></div>
+      <div class="head"><p class="eyebrow">Packages</p><h2>Pick your lineup</h2><p>Sound system, song requests and ambient lighting included with every package.</p></div>
       <div class="pk-grid">
         <article class="pk"><h3>Duo</h3><p class="price">From $200</p><p class="for"><b style="color:var(--cream)">Danny &amp; Christina</b><br>Vocals, Sax, Flute, Guitar, Keyboards</p><a class="btn btn-ghost" href="#book" data-pkg="Duo">Ask about the Duo</a></article>
         <article class="pk pop"><h3>Trio</h3><p class="price">From $300</p><p class="for"><b style="color:var(--cream)">Danny &amp; Christina</b><br>Add Bass, Drums or Congas</p><a class="btn btn-solid" href="#book" data-pkg="Trio">Ask about the Trio</a></article>
@@ -451,6 +464,22 @@ main > section ~ section{border-top:2px solid var(--red)}
         <label class="full">City or venue<input id="f-where" name="city_or_venue"></label>
         <label>Event type<select id="f-type" name="event_type"><option>Wedding</option><option>Corporate event</option><option>Private party</option><option>Yacht party</option><option>Restaurant / wine bar</option><option>Other</option></select></label>
         <label>Lineup<select id="f-pkg" name="lineup"><option>Not sure yet</option><option selected>Duo</option><option>Trio</option><option>Full band</option></select></label>
+        <div class="full addons-field" role="group" aria-labelledby="addons-label">
+          <span id="addons-label">Add-ons (optional)</span>
+          <details class="addons" id="addons">
+            <summary><span id="addons-sum">Select add-ons</span></summary>
+            <div class="addons-menu">
+              <label><input type="checkbox" value="Lead Guitar">Lead Guitar</label>
+              <label><input type="checkbox" value="Bass">Bass</label>
+              <label><input type="checkbox" value="Drums">Drums</label>
+              <label><input type="checkbox" value="Congas">Congas</label>
+              <label><input type="checkbox" value="Horn Section">Horn Section</label>
+              <label><input type="checkbox" value="DJ">DJ</label>
+              <label><input type="checkbox" value="DJ / Sax Combo">DJ / Sax Combo</label>
+            </div>
+          </details>
+          <input type="hidden" name="add_ons" id="f-addons" value="">
+        </div>
         <label class="full">Anything else?<textarea id="f-msg" name="message" placeholder="Example: About 120 guests, Cocktail Hour, Dinner Music, First Dance, Dance Set"></textarea></label>
         <button class="btn btn-solid" type="submit">Check availability</button>
         <p class="sent" id="sent" hidden aria-live="polite"></p>
@@ -547,6 +576,12 @@ const REVIEWS=[
   const dd=document.getElementById("depDialog");document.getElementById("depBtn").addEventListener("click",()=>{try{dd.showModal()}catch(e){dd.setAttribute("open","")}});dd.addEventListener("click",e=>{if(e.target===dd)dd.close();});
   document.querySelectorAll("[data-top]").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();window.scrollTo({top:0,behavior:reduce?"auto":"smooth"});}));
   const bf=document.getElementById("bookForm"),sent=document.getElementById("sent");
+  const aoEl=document.getElementById("addons"),aoSum=document.getElementById("addons-sum"),aoIn=document.getElementById("f-addons"),aoBox=[...aoEl.querySelectorAll("input[type=checkbox]")];
+  const aoUpd=()=>{const v=aoBox.filter(c=>c.checked).map(c=>c.value);aoIn.value=v.join(", ");aoSum.textContent=v.length?v.join(", "):"Select add-ons";};
+  aoBox.forEach(c=>c.addEventListener("change",aoUpd));aoUpd();
+  document.addEventListener("click",e=>{if(aoEl.open&&!aoEl.contains(e.target))aoEl.open=false;});
+  aoEl.addEventListener("keydown",e=>{if(e.key==="Escape"&&aoEl.open){aoEl.open=false;aoEl.querySelector("summary").focus();}});
+  bf.addEventListener("submit",aoUpd);bf.addEventListener("reset",()=>setTimeout(aoUpd,0));
   bf.addEventListener("submit",e=>{e.preventDefault();const btn=bf.querySelector('button[type="submit"]');btn.disabled=true;btn.textContent="Sending…";
     fetch("/",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:new URLSearchParams(new FormData(bf)).toString()})
     .then(r=>{if(!r.ok)throw 0;sent.textContent="Thanks! Your request was sent. Danny will get back to you soon.";sent.hidden=false;bf.reset();btn.textContent="Sent";})
