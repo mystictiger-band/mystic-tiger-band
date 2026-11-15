@@ -173,7 +173,7 @@ nav{font-size:16px}
 @media (max-width:900px){.ev-grid{grid-template-columns:1fr 1fr}}
 @media (max-width:480px){.ev-grid{grid-template-columns:1fr}}
 /* Music style buttons */
-.styles-box{margin-top:48px}
+.styles-box{margin-top:0}
 .styles-title{text-align:center;font-size:28px;margin-bottom:16px}
 .style-btns{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
 .style-btns button{font:600 14px var(--body);color:var(--cream);background:transparent;border:1px solid var(--gold);border-radius:999px;padding:10px 16px;cursor:pointer;transition:background .2s,color .2s}
@@ -309,6 +309,8 @@ header::after{top:100%}
 main > section ~ section{border-top:2px solid var(--red)}
 .hero-place{grid-column:1/-1;text-align:center;margin-bottom:8px}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+/* Big gold text, same size and color as section labels like "The Band" */
+main .gold-lg{font-family:var(--display);font-size:clamp(22px,3vw,32px);line-height:1.25;color:var(--gold);letter-spacing:normal;text-transform:none;font-weight:400}
 </style>
 </head>
 <body>
@@ -366,19 +368,19 @@ main > section ~ section{border-top:2px solid var(--red)}
 
   <section class="alt" id="packages">
     <div class="wrap">
-      <div class="head"><p class="eyebrow">Packages</p><h2>Pick your lineup</h2><p>Sound system and ambient lighting included with every package.</p></div>
+      <div class="head"><p class="eyebrow">Packages</p><h2>Pick your lineup</h2><p class="gold-lg">Sound system and ambient lighting included with every package.</p></div>
       <div class="pk-grid">
         <article class="pk"><h3>Duo</h3><p class="price">From $200</p><p class="for"><b style="color:var(--cream)">Danny &amp; Christina</b><br>Vocals, Sax, Flute, Guitar, Keyboards</p><a class="btn btn-ghost" href="#book" data-pkg="Duo">Ask about the Duo</a></article>
         <article class="pk pop"><h3>Trio</h3><p class="price">From $300</p><p class="for"><b style="color:var(--cream)">Danny &amp; Christina</b><br>Add Bass, Drums or Congas</p><a class="btn btn-solid" href="#book" data-pkg="Trio">Ask about the Trio</a></article>
         <article class="pk"><h3>Full band</h3><p class="price">From $500</p><p class="for"><b style="color:var(--cream)">Danny &amp; Christina</b><br>Add Lead Guitar, Bass and Drums</p><a class="btn btn-ghost" href="#book" data-pkg="Full band">Ask about the Full band</a></article>
       </div>
-      <p class="pk-note">Add lead guitar, bass, drums, congas, horns or a DJ to any lineup.</p>
+      <p class="pk-note gold-lg">Add lead guitar, bass, drums, congas, horns, DJ or a DJ/sax to any lineup.</p>
     </div>
   </section>
 
   <section id="events">
     <div class="wrap">
-      <div class="head"><p class="eyebrow">Events</p><h2>Live music for every occasion</h2><p>We bring fun and professional live music to every type of event and venue.</p></div>
+      <div class="head"><p class="eyebrow">Events</p><h2>Live music for every occasion</h2><p class="gold-lg">We bring fun and professional live music to every type of event and venue.</p></div>
       <div class="ev-grid">
         <article class="ev"><h3>Weddings</h3><p>Wedding ceremony music, cocktail hour, dinner sets, your first dance song and a full dance-floor reception.</p></article>
         <article class="ev"><h3>Corporate events</h3><p>Corporate functions, company holiday parties, luncheons, award dinners and client receptions.</p></article>
@@ -390,12 +392,12 @@ main > section ~ section{border-top:2px solid var(--red)}
         <article class="ev"><h3>Senior communities</h3><p>Senior centers and retirement communities, from Motown nights to classic oldies.</p></article>
       </div>
       <div class="where">
-        <h3>Where we play</h3>
+        <h3 class="gold-lg">Where We Play</h3>
         <p>Based in Long Beach, playing all over Los Angeles and Orange County, and traveling to destinations, near or far, for weddings and special events.</p>
         <div class="chips">
           <span>Long Beach</span><span>Los Angeles</span><span>Orange County</span><span>Huntington Beach</span><span>Laguna Beach</span><span>Newport Beach</span><span>Seal Beach</span>
         </div>
-        <p class="eyebrow" style="margin-top:20px">Anywhere in the World</p>
+        <p class="eyebrow gold-lg" style="margin-top:20px">Anywhere in the World</p>
       </div>
     </div>
   </section>
@@ -417,8 +419,13 @@ main > section ~ section{border-top:2px solid var(--red)}
     <div class="wrap">
       <div class="head"><p class="eyebrow">Videos</p><h2>Clips from live gigs</h2></div>
       <div class="vid-grid" id="vids"></div>
+    </div>
+  </section>
+
+  <section id="styles">
+    <div class="wrap">
       <div class="styles-box">
-        <h3 class="styles-title">Music styles</h3>
+        <h3 class="styles-title gold-lg">Music Styles</h3>
         <div class="style-btns" id="styleBtns" role="tablist" aria-label="Music styles"></div>
         <div class="style-panel" id="stylePanel" role="tabpanel" hidden><p class="style-desc" id="styleDesc"></p><ul class="style-songs" id="styleSongs"></ul></div>
       </div>
@@ -491,7 +498,7 @@ main > section ~ section{border-top:2px solid var(--red)}
         <label class="full">Anything else?<textarea id="f-msg" name="message" placeholder="Example: About 120 guests, Cocktail Hour, Dinner Music, First Dance, Dance Set"></textarea></label>
         <div class="full book-cta">
           <button class="btn btn-solid" type="submit">Check availability and pricing</button>
-          <p class="cta-note">Distance, travel time, and the number of song requests (where applicable) are factored into pricing.</p>
+          <p class="cta-note">Distance, travel time, add-ons, and the number of song requests (where applicable) are factored into pricing.</p>
         </div>
         <p class="sent" id="sent" hidden aria-live="polite"></p>
       </form>
