@@ -135,6 +135,7 @@ nav{font-size:16px}
 .show{position:relative}
 .track{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:4px 2px 8px;scrollbar-width:none}
 .track::-webkit-scrollbar{display:none}
+.track::before,.track::after{content:"";flex:0 0 calc(max(50% - 170px, 9%) - 18px)}
 .slide{flex:0 0 min(340px,82%);height:480px;scroll-snap-align:center;border:1px solid var(--line);border-radius:12px;background:var(--panel);overflow:hidden;display:flex}
 .slide.txt{flex-direction:column;justify-content:center;padding:30px 28px;gap:14px}
 .slide.txt p{font-family:var(--display);font-size:20px;line-height:1.45}
@@ -154,6 +155,7 @@ nav{font-size:16px}
 /* Gallery slideshow */
 .gtrack{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:4px 2px 8px;scrollbar-width:none}
 .gtrack::-webkit-scrollbar{display:none}
+.gtrack::before{content:"";flex:0 0 var(--gl,0px)}.gtrack::after{content:"";flex:0 0 var(--gr,0px)}
 .gtrack button{all:unset;display:block;flex:0 0 auto;height:420px;min-width:200px;scroll-snap-align:center;border-radius:10px;overflow:hidden;cursor:zoom-in;background:#111}
 .gtrack button:focus-visible{outline:2px solid var(--gold);outline-offset:-3px}
 .gtrack img{height:100%;width:auto;max-width:none;display:block}
@@ -565,12 +567,13 @@ const REVIEWS=[
   document.querySelector("#show .prev").addEventListener("click",()=>{go(cur-1);stop();});
   document.querySelector("#show .next").addEventListener("click",()=>{go(cur+1);stop();});
   const reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
-  function start(){if(reduce||timer)return;timer=setInterval(()=>go(cur+1),5000);}
+  const onScreen={show:false,gshow:false};
+  function start(){if(reduce||timer||!onScreen.show)return;timer=setInterval(()=>go(cur+1),5000);}
   function stop(){clearInterval(timer);timer=null;}
   ["pointerdown","touchstart","wheel"].forEach(ev=>track.addEventListener(ev,stop,{passive:true}));
   document.getElementById("show").addEventListener("mouseenter",stop);
   document.getElementById("show").addEventListener("mouseleave",start);
-  mark();start();
+  track.scrollLeft=0;mark();
   const gt=document.getElementById("gtrack"),gc=document.getElementById("gcount"),GN=39;let gcur=0,gtimer=null;
   for(let i=1;i<=GN;i++){const b=document.createElement("button");b.type="button";b.setAttribute("aria-label","Band photo "+i+", tap to enlarge");const im=document.createElement("img");im.src="img/gallery/g"+String(i).padStart(2,"0")+".jpg";im.alt="Mystic Tiger Band photo "+i;b.appendChild(im);b.addEventListener("click",()=>{lbi.src=im.src;lbi.alt=im.alt;try{lb.showModal()}catch(e){lb.setAttribute("open","")}});gt.appendChild(b);}
   const gs=[...gt.children];
@@ -580,11 +583,15 @@ const REVIEWS=[
   const gsh=document.getElementById("gshow");
   gsh.querySelector(".prev").addEventListener("click",()=>{ggo(gcur-1);gstop();});
   gsh.querySelector(".next").addEventListener("click",()=>{ggo(gcur+1);gstop();});
-  function gstart(){if(reduce||gtimer)return;gtimer=setInterval(()=>ggo(gcur+1),4000);}
+  function gstart(){if(reduce||gtimer||!onScreen.gshow)return;gtimer=setInterval(()=>ggo(gcur+1),4000);}
   function gstop(){clearInterval(gtimer);gtimer=null;}
   ["pointerdown","touchstart","wheel"].forEach(ev=>gt.addEventListener(ev,gstop,{passive:true}));
   gsh.addEventListener("mouseenter",gstop);gsh.addEventListener("mouseleave",gstart);
-  gstart();
+  function gpad(){const C=gt.clientWidth;gt.style.setProperty("--gl",Math.max(0,(C-gs[0].offsetWidth)/2-16)+"px");gt.style.setProperty("--gr",Math.max(0,(C-gs[GN-1].offsetWidth)/2-16)+"px");}
+  gs[0].querySelector("img").addEventListener("load",()=>{gpad();gmark();});gs[GN-1].querySelector("img").addEventListener("load",gpad);addEventListener("resize",gpad);
+  gpad();gt.scrollLeft=0;gmark();
+  if("IntersectionObserver" in window){const io=new IntersectionObserver(es=>es.forEach(en=>{onScreen[en.target.id]=en.isIntersecting;if(en.target.id==="show"){en.isIntersecting?start():stop();}else{en.isIntersecting?gstart():gstop();}}),{threshold:.4});io.observe(document.getElementById("show"));io.observe(gsh);}
+  else{onScreen.show=onScreen.gshow=true;start();gstart();}
   lb.addEventListener("click",e=>{if(e.target===lb)lb.close();});
   document.querySelectorAll("[data-pkg]").forEach(b=>b.addEventListener("click",()=>{document.getElementById("f-pkg").value=b.dataset.pkg;}));
   const dd=document.getElementById("depDialog");document.getElementById("depBtn").addEventListener("click",()=>{try{dd.showModal()}catch(e){dd.setAttribute("open","")}});dd.addEventListener("click",e=>{if(e.target===dd)dd.close();});
