@@ -263,6 +263,9 @@ dialog form{display:flex;justify-content:center;margin-top:12px}
 input,select,textarea{font:16px var(--body);color:var(--cream);background:var(--ink);border:1px solid var(--line);border-radius:4px;padding:11px 12px;width:100%}
 textarea{min-height:90px;resize:vertical}
 #bookForm .btn{justify-self:start}
+.book-cta{display:flex;align-items:center;flex-wrap:wrap;gap:12px 18px}
+.book-cta .btn{max-width:100%;text-align:center;justify-content:center}
+.cta-note{flex:1 1 200px;margin:0;font-size:13px;line-height:1.45;color:var(--muted)}
 .addons-field{display:grid;gap:6px;font-size:14px;color:var(--muted);min-width:0}
 .addons{position:relative}
 .addons summary{display:block;list-style:none;cursor:pointer;font:16px var(--body);color:var(--cream);background:var(--ink);border:1px solid var(--line);border-radius:4px;padding:11px 40px 11px 12px;position:relative}
@@ -482,7 +485,10 @@ main > section ~ section{border-top:2px solid var(--red)}
           <input type="hidden" name="add_ons" id="f-addons" value="">
         </div>
         <label class="full">Anything else?<textarea id="f-msg" name="message" placeholder="Example: About 120 guests, Cocktail Hour, Dinner Music, First Dance, Dance Set"></textarea></label>
-        <button class="btn btn-solid" type="submit">Check availability</button>
+        <div class="full book-cta">
+          <button class="btn btn-solid" type="submit">Check availability and pricing</button>
+          <p class="cta-note">Distance, travel time, and the number of song requests (where applicable) are factored into pricing.</p>
+        </div>
         <p class="sent" id="sent" hidden aria-live="polite"></p>
       </form>
     </div>
@@ -586,7 +592,7 @@ const REVIEWS=[
   bf.addEventListener("submit",e=>{e.preventDefault();const btn=bf.querySelector('button[type="submit"]');btn.disabled=true;btn.textContent="Sending…";
     fetch("/",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:new URLSearchParams(new FormData(bf)).toString()})
     .then(r=>{if(!r.ok)throw 0;sent.textContent="Thanks! Your request was sent. Danny will get back to you soon.";sent.hidden=false;bf.reset();btn.textContent="Sent";})
-    .catch(()=>{sent.textContent="Sorry, that didn't go through. Please call or text Danny at (562) 284-3541.";sent.hidden=false;btn.disabled=false;btn.textContent="Check availability";});});
+    .catch(()=>{sent.textContent="Sorry, that didn't go through. Please call or text Danny at (562) 284-3541.";sent.hidden=false;btn.disabled=false;btn.textContent="Check availability and pricing";});});
   const vd=document.getElementById("vidDialog"),vf=document.getElementById("vidFrame");
   document.addEventListener("click",e=>{const a=e.target.closest('a[href*="youtu.be/"]');if(!a)return;const id=a.getAttribute("href").split("youtu.be/")[1].split(/[?&#]/)[0];if(!id||!vd.showModal)return;e.preventDefault();vf.src="https://www.youtube-nocookie.com/embed/"+id+"?autoplay=1&rel=0&playsinline=1";vd.showModal();});
   vd.addEventListener("close",()=>{vf.src="";});vd.addEventListener("click",e=>{if(e.target===vd)vd.close();});
