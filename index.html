@@ -85,6 +85,8 @@ section{padding-block:96px}
 @media (max-width:700px){section{padding-block:64px}}
 .alt{background:var(--deep)}
 .eyebrow{font-family:var(--display);font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.head .eyebrow,.hero-place,.book-left>.eyebrow{font-size:clamp(22px,3vw,32px);letter-spacing:normal;text-transform:none;line-height:1.2;color:var(--gold)}
+section[tabindex="-1"]:focus{outline:none}
 .head{text-align:center;max-width:620px;margin:0 auto 44px}
 .head h2{font-size:clamp(34px,4.4vw,50px);margin-top:10px}
 .head p{color:var(--muted);margin-top:12px}
@@ -345,7 +347,7 @@ main > section ~ section{border-top:2px solid var(--red)}
 
   <section id="band">
     <div class="wrap">
-      <div class="head"><p class="eyebrow">The band</p><h2>Danny &amp; Christina</h2></div>
+      <div class="head"><p class="eyebrow">The Band</p><h2>Danny &amp; Christina</h2></div>
       <div class="duo">
         <article class="member">
           <img src="img/danny-mercedes.jpg" alt="Danny Mancuso with his saxophone on a classic Mercedes under the palm trees">
@@ -376,7 +378,7 @@ main > section ~ section{border-top:2px solid var(--red)}
 
   <section id="events">
     <div class="wrap">
-      <div class="head"><p class="eyebrow">Events we play</p><h2>Live music for every occasion</h2><p>Wedding band, party band or background music for a quiet dinner, shaped to your room and your crowd.</p></div>
+      <div class="head"><p class="eyebrow">Events We Play</p><h2>Live music for every occasion</h2><p>Wedding band, party band or background music for a quiet dinner, shaped to your room and your crowd.</p></div>
       <div class="ev-grid">
         <article class="ev"><h3>Weddings</h3><p>Wedding ceremony music, cocktail hour, dinner sets, your first dance song and a full dance-floor reception.</p></article>
         <article class="ev"><h3>Corporate events</h3><p>Corporate functions, company holiday parties, luncheons, award dinners and client receptions.</p></article>
@@ -413,7 +415,7 @@ main > section ~ section{border-top:2px solid var(--red)}
 
   <section id="videos">
     <div class="wrap">
-      <div class="head"><p class="eyebrow">Hear it first</p><h2>Clips from real gigs</h2></div>
+      <div class="head"><p class="eyebrow">Hear It First</p><h2>Clips from real gigs</h2></div>
       <div class="vid-grid" id="vids"></div>
       <div class="styles-box">
         <h3 class="styles-title">Music styles</h3>
@@ -505,6 +507,9 @@ main > section ~ section{border-top:2px solid var(--red)}
 </footer>
 
 <script>
+// A refresh always starts at the top (Home), even if the address ends in #book etc.
+try{history.scrollRestoration="manual";}catch(e){}
+(()=>{const n=performance.getEntriesByType?performance.getEntriesByType("navigation")[0]:null;const isReload=n?n.type==="reload":!!(performance.navigation&&performance.navigation.type===1);if(!isReload)return;if(location.hash)history.replaceState(null,"",location.pathname+location.search);const top=()=>{try{window.scrollTo({top:0,left:0,behavior:"instant"});}catch(e){window.scrollTo(0,0);}};top();addEventListener("load",()=>{top();setTimeout(top,60);});})();
 // Gig calendar. W = Sunday Marina Wine Bar with the CC Band. Add new dates at the bottom.
 const W=["Marina Wine Bar","6:30–9:30 pm","CC Band"],MT="Mystic Tiger",CC="CC Band";
 const G=(d,w,t,b)=>[d,w,t,b];
@@ -584,6 +589,7 @@ const REVIEWS=[
   document.querySelectorAll("[data-pkg]").forEach(b=>b.addEventListener("click",()=>{document.getElementById("f-pkg").value=b.dataset.pkg;}));
   const dd=document.getElementById("depDialog");document.getElementById("depBtn").addEventListener("click",()=>{try{dd.showModal()}catch(e){dd.setAttribute("open","")}});dd.addEventListener("click",e=>{if(e.target===dd)dd.close();});
   document.querySelectorAll("[data-top]").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();window.scrollTo({top:0,behavior:reduce?"auto":"smooth"});}));
+  document.addEventListener("click",e=>{const a=e.target.closest&&e.target.closest('a[href^="#"]');if(!a||e.defaultPrevented||e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;const t=document.getElementById(a.getAttribute("href").slice(1));if(!t)return;e.preventDefault();t.scrollIntoView({behavior:reduce?"auto":"smooth",block:"start"});if(!t.hasAttribute("tabindex"))t.setAttribute("tabindex","-1");t.focus({preventScroll:true});});
   const bf=document.getElementById("bookForm"),sent=document.getElementById("sent");
   const aoEl=document.getElementById("addons"),aoSum=document.getElementById("addons-sum"),aoIn=document.getElementById("f-addons"),aoBox=[...aoEl.querySelectorAll("input[type=checkbox]")];
   const aoUpd=()=>{const v=aoBox.filter(c=>c.checked).map(c=>c.value);aoIn.value=v.join(", ");aoSum.textContent=v.length?v.join(", "):"Select add-ons";};
