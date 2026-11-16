@@ -32,7 +32,7 @@
       "email":"mystictigerband@gmail.com",
       "priceRange":"$200+",
       "address":{"@type":"PostalAddress","addressLocality":"Long Beach","addressRegion":"CA","postalCode":"90801","addressCountry":"US"},
-      "areaServed":["Long Beach, CA","Los Angeles, CA","Orange County, CA","Huntington Beach, CA","Laguna Beach, CA","Newport Beach, CA","Seal Beach, CA","Southern California","Las Vegas, NV","Lake Tahoe","Hawaii","Florida","Tahiti","Thailand","Europe"],
+      "areaServed":["Los Angeles, CA","Orange County, CA","Beverly Hills, CA","Santa Monica, CA","South Bay, CA","Long Beach, CA","Seal Beach, CA","Sunset Beach, CA","Huntington Beach, CA","Newport Beach, CA","Laguna Beach, CA","Southern California","Las Vegas, NV","Lake Tahoe","Hawaii","Florida","Tahiti","Thailand","Europe"],
       "member":[
         {"@type":"Person","name":"Danny Mancuso","roleName":"Vocals, Saxophone, Flute"},
         {"@type":"Person","name":"Christina Dillon","roleName":"Vocals, Guitar, Keyboards"}
@@ -368,8 +368,8 @@ main .gold-lg{font-family:var(--display);font-size:clamp(22px,3vw,32px);line-hei
     <div class="wrap">
       <div class="head"><p class="eyebrow">Packages</p><h2>Pick your lineup</h2><p class="gold-lg">Sound system and ambient lighting included with every package.</p></div>
       <div class="pk-grid">
-        <article class="pk"><h3>Duo</h3><p class="price">From $200</p><p class="for"><b style="color:var(--cream)">Danny &amp; Christina</b><br>Vocals, Sax, Flute, Guitar, Keyboards</p><a class="btn btn-ghost" href="#book" data-pkg="Duo">Ask about the Duo</a></article>
-        <article class="pk pop"><h3>Trio</h3><p class="price">From $300</p><p class="for"><b style="color:var(--cream)">Danny &amp; Christina</b><br>Add Bass, Drums or Congas</p><a class="btn btn-solid" href="#book" data-pkg="Trio">Ask about the Trio</a></article>
+        <article class="pk pop"><h3>Duo</h3><p class="price">From $200</p><p class="for"><b style="color:var(--cream)">Danny &amp; Christina</b><br>Vocals, Sax, Flute, Guitar, Keyboards</p><a class="btn btn-solid" href="#book" data-pkg="Duo">Ask about the Duo</a></article>
+        <article class="pk"><h3>Trio</h3><p class="price">From $300</p><p class="for"><b style="color:var(--cream)">Danny &amp; Christina</b><br>Add Bass, Drums or Congas</p><a class="btn btn-ghost" href="#book" data-pkg="Trio">Ask about the Trio</a></article>
         <article class="pk"><h3>Full band</h3><p class="price">From $500</p><p class="for"><b style="color:var(--cream)">Danny &amp; Christina</b><br>Add Lead Guitar, Bass and Drums</p><a class="btn btn-ghost" href="#book" data-pkg="Full band">Ask about the Full band</a></article>
       </div>
       <p class="pk-note gold-lg">Add lead guitar, bass, drums, congas, horns, DJ or a DJ/sax to any lineup.</p>
@@ -393,7 +393,7 @@ main .gold-lg{font-family:var(--display);font-size:clamp(22px,3vw,32px);line-hei
         <h3 class="gold-lg">Where We Play</h3>
         <p>Based in Long Beach, playing all over Los Angeles and Orange County, and traveling to destinations, near or far, for weddings and special events.</p>
         <div class="chips">
-          <span>Long Beach</span><span>Los Angeles</span><span>Orange County</span><span>Huntington Beach</span><span>Laguna Beach</span><span>Newport Beach</span><span>Seal Beach</span>
+          <span>Los Angeles</span><span>Orange County</span><span>Beverly Hills</span><span>Santa Monica</span><span>South Bay</span><span>Long Beach</span><span>Seal Beach</span><span>Sunset Beach</span><span>Huntington Beach</span><span>Newport Beach</span><span>Laguna Beach</span>
         </div>
         <p class="eyebrow gold-lg" style="margin-top:20px">Anywhere in the World</p>
       </div>
@@ -601,7 +601,9 @@ const REVIEWS=[
   if("IntersectionObserver" in window){const io=new IntersectionObserver(es=>es.forEach(en=>{onScreen[en.target.id]=en.isIntersecting;if(en.target.id==="show"){en.isIntersecting?start():stop();}else{en.isIntersecting?gstart():gstop();}}),{threshold:.4});io.observe(document.getElementById("show"));io.observe(gsh);}
   else{onScreen.show=onScreen.gshow=true;start();gstart();}
   lb.addEventListener("click",e=>{if(e.target===lb)lb.close();});
-  document.querySelectorAll("[data-pkg]").forEach(b=>b.addEventListener("click",()=>{document.getElementById("f-pkg").value=b.dataset.pkg;}));
+  const pkPick=v=>document.querySelectorAll(".pk").forEach(c=>{const b=c.querySelector("[data-pkg]"),on=!!b&&b.dataset.pkg===v;c.classList.toggle("pop",on);if(b){b.classList.toggle("btn-solid",on);b.classList.toggle("btn-ghost",!on);}});
+  document.querySelectorAll("[data-pkg]").forEach(b=>b.addEventListener("click",()=>{document.getElementById("f-pkg").value=b.dataset.pkg;pkPick(b.dataset.pkg);}));
+  document.getElementById("f-pkg").addEventListener("change",e=>pkPick(e.target.value));
   const dd=document.getElementById("depDialog");document.getElementById("depBtn").addEventListener("click",()=>{try{dd.showModal()}catch(e){dd.setAttribute("open","")}});dd.addEventListener("click",e=>{if(e.target===dd)dd.close();});
   document.querySelectorAll("[data-top]").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();window.scrollTo({top:0,behavior:reduce?"auto":"smooth"});}));
   document.addEventListener("click",e=>{const a=e.target.closest&&e.target.closest('a[href^="#"]');if(!a||e.defaultPrevented||e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;const t=document.getElementById(a.getAttribute("href").slice(1));if(!t)return;e.preventDefault();t.scrollIntoView({behavior:reduce?"auto":"smooth",block:"start"});if(!t.hasAttribute("tabindex"))t.setAttribute("tabindex","-1");t.focus({preventScroll:true});});
@@ -611,7 +613,7 @@ const REVIEWS=[
   aoBox.forEach(c=>c.addEventListener("change",aoUpd));aoUpd();
   document.addEventListener("click",e=>{if(aoEl.open&&!aoEl.contains(e.target))aoEl.open=false;});
   aoEl.addEventListener("keydown",e=>{if(e.key==="Escape"&&aoEl.open){aoEl.open=false;aoEl.querySelector("summary").focus();}});
-  bf.addEventListener("submit",aoUpd);bf.addEventListener("reset",()=>setTimeout(aoUpd,0));
+  bf.addEventListener("submit",aoUpd);bf.addEventListener("reset",()=>setTimeout(()=>{aoUpd();pkPick(document.getElementById("f-pkg").value);},0));
   bf.addEventListener("submit",e=>{e.preventDefault();const btn=bf.querySelector('button[type="submit"]');btn.disabled=true;btn.textContent="Sending…";
     fetch("/",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:new URLSearchParams(new FormData(bf)).toString()})
     .then(r=>{if(!r.ok)throw 0;sent.textContent="Thanks! Your request was sent. Danny will get back to you soon.";sent.hidden=false;bf.reset();btn.textContent="Sent";})
